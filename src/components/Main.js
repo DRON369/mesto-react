@@ -1,19 +1,42 @@
 import api from '../utils/Api.js';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import Card from './Card.js';
 
 function Main(props) {
 
   const [userName, setUserName] = useState();
   const [userDescription, setUserDescription] = useState();
   const [userAvatar, setUserAvatar] = useState();
+  const [cards, setCards] = useState([]);
 
-  api.getUserInfo()
-    .then(userInfo => {
-      setUserName(userInfo.name);
-      setUserDescription(userInfo.about);
-      setUserAvatar(userInfo.avatar);
-    }
-    ).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+  const cardsHandler = () => {
+    api.getCards()
+      .then(data => {
+        const cards = data.map(item => {
+          return {
+            id: item._id,
+            link: item.link,
+            name: item.name
+          }
+        })
+        setCards(cards);
+      }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+  }
+
+  const userInfoHandler = () => {
+    api.getUserInfo()
+      .then(userInfo => {
+        setUserName(userInfo.name);
+        setUserDescription(userInfo.about);
+        setUserAvatar(userInfo.avatar);
+      })
+      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+  }
+
+  useEffect(() => {
+    userInfoHandler()
+    cardsHandler()
+  }, [])
 
   return (
     <main className="content">
@@ -36,22 +59,17 @@ function Main(props) {
 
       <section className="cards">
         <ul className="cards__list">
+          {
+            cards.map(item =>
+              <Card
+                key={item.id}
+                id={item.id}
+                link={item.link}
+                name={item.name}
+              />)
+          }
         </ul>
       </section>
-
-      <template className="card-template">
-        <li className="cards__item" id="">
-          <img src="#" alt="Изображение места" className="cards__image" />
-          <button className="cards__remove-button" type="button" aria-label="Удалить карточку"></button>
-          <div className="cards__body">
-            <h2 className="cards__label"></h2>
-            <div className="cards__like-container">
-              <button className="cards__like-button" type="button" aria-label="Поставить лайк карточке"></button>
-              <p className="cards__likes-counter">0</p>
-            </div>
-          </div>
-        </li>
-      </template>
 
     </main>
   );
