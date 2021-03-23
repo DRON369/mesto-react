@@ -1,18 +1,33 @@
+import api from '../utils/Api.js';
+import { useState } from 'react';
+
 function Main(props) {
+
+  const [userName, setUserName] = useState();
+  const [userDescription, setUserDescription] = useState();
+  const [userAvatar, setUserAvatar] = useState();
+
+  api.getUserInfo()
+    .then(userInfo => {
+      setUserName(userInfo.name);
+      setUserDescription(userInfo.about);
+      setUserAvatar(userInfo.avatar);
+    }
+    ).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
 
   return (
     <main className="content">
       <section className="profile">
         <div className="profile__container">
           <button className="profile__avatar-button" type="button" aria-label="Изменить аватар" onClick={props.onEditAvatar}>
-            <img src="#" alt="Фото профиля" className="profile__avatar" />
+            <img src={`${userAvatar}`} alt="Фото профиля" className="profile__avatar" />
           </button>
           <div className="profile__info">
             <div className="profile__title-container">
-              <h1 className="profile__title"></h1>
+              <h1 className="profile__title">{userName}</h1>
               <button className="profile__edit-button" aria-label="Редактировать профиль" onClick={props.onEditProfile}></button>
             </div>
-            <p className="profile__subtitle"></p>
+            <p className="profile__subtitle">{userDescription}</p>
           </div>
 
         </div>
