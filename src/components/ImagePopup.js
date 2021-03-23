@@ -1,4 +1,4 @@
-function ImagePopup() {
+function ImagePopup(props) {
   return (
     <div className="popup popup_type_image">
       <figure className="popup__container popup__container_type_image">
@@ -9,3 +9,5 @@ function ImagePopup() {
     </div>
   )
 }
+
+export default ImagePopup;

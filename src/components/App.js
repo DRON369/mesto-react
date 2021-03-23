@@ -2,7 +2,8 @@ import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
 import PopupWithForm from './PopupWithForm.js';
-import { useState } from 'react';
+import ImagePopup from './ImagePopup.js';
+import { useEffect, useState } from 'react';
 
 
 function App() {
@@ -10,6 +11,15 @@ function App() {
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setAddPlacePopupOpen] = useState(false);
+  //const [selectedCard, setSelectedCard] = useState();
+
+  function handleCardClick () {
+    //setSelectedCard();
+  }
+
+  <ImagePopup
+    //card
+  />
 
   function handleEditProfileClick() {
     setEditProfilePopupOpen(true);
@@ -24,6 +34,7 @@ function App() {
   }
 
   function closeAllPopups () {
+    //setSelectedCard();
     setEditProfilePopupOpen(false);
     setEditAvatarPopupOpen(false);
     setAddPlacePopupOpen(false);
