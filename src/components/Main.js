@@ -16,7 +16,7 @@ function Main(props) {
           return {
             id: item._id,
             link: item.link,
-            name: item.name
+            name: item.name,
           }
         })
         setCards(cards);
@@ -66,6 +66,7 @@ function Main(props) {
                 id={item.id}
                 link={item.link}
                 name={item.name}
+                onCardClick={props.onCardClick}
               />)
           }
         </ul>
