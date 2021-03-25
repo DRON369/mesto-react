@@ -1,4 +1,4 @@
-import api from '../utils/Api.js';
+import api from '../utils/api.js';
 import { useState, useEffect } from 'react';
 import Card from './Card.js';
 
@@ -12,14 +12,7 @@ function Main(props) {
   const cardsHandler = () => {
     api.getCards()
       .then(data => {
-        const cards = data.map(item => {
-          return {
-            id: item._id,
-            link: item.link,
-            name: item.name,
-          }
-        })
-        setCards(cards);
+        setCards(data);
       }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
   }
 
@@ -60,15 +53,16 @@ function Main(props) {
       <section className="cards">
         <ul className="cards__list">
           {
-            cards.map(item =>
+            cards.map(item => (
               <Card
-                key={item.id}
-                id={item.id}
+                key={item._id}
+                id={item._id}
                 link={item.link}
                 name={item.name}
+                likes={item.likes.length}
                 onCardClick={props.onCardClick}
               />)
-          }
+            )}
         </ul>
       </section>
 
