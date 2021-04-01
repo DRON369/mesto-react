@@ -1,12 +1,13 @@
 import api from '../utils/api.js';
 import { useState, useEffect } from 'react';
 import Card from './Card.js';
+import React from 'react';
+import { UserContext } from '../contexts/CurrentUserContext.js';
+
 
 function Main(props) {
 
-  const [userName, setUserName] = useState();
-  const [userDescription, setUserDescription] = useState();
-  const [userAvatar, setUserAvatar] = useState();
+  const user = React.useContext(UserContext);
   const [cards, setCards] = useState([]);
 
   const cardsHandler = () => {
@@ -16,18 +17,7 @@ function Main(props) {
       }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
   }
 
-  const userInfoHandler = () => {
-    api.getUserInfo()
-      .then(userInfo => {
-        setUserName(userInfo.name);
-        setUserDescription(userInfo.about);
-        setUserAvatar(userInfo.avatar);
-      })
-      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
-  }
-
   useEffect(() => {
-    userInfoHandler()
     cardsHandler()
   }, [])
 
@@ -36,14 +26,14 @@ function Main(props) {
       <section className="profile">
         <div className="profile__container">
           <button className="profile__avatar-button" type="button" aria-label="Изменить аватар" onClick={props.onEditAvatar}>
-            <img src={`${userAvatar}`} alt="Фото профиля" className="profile__avatar" />
+            <img src={`${user.avatar}`} alt="Фото профиля" className="profile__avatar" />
           </button>
           <div className="profile__info">
             <div className="profile__title-container">
-              <h1 className="profile__title">{userName}</h1>
+              <h1 className="profile__title">{user.name}</h1>
               <button className="profile__edit-button" aria-label="Редактировать профиль" onClick={props.onEditProfile}></button>
             </div>
-            <p className="profile__subtitle">{userDescription}</p>
+            <p className="profile__subtitle">{user.about}</p>
           </div>
 
         </div>
@@ -55,11 +45,8 @@ function Main(props) {
           {
             cards.map(item => (
               <Card
+                card={item}
                 key={item._id}
-                id={item._id}
-                link={item.link}
-                name={item.name}
-                likes={item.likes.length}
                 onCardClick={props.onCardClick}
               />)
             )}
