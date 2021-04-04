@@ -21,6 +21,8 @@ function AddPlacePopup(props) {
       name: cardName,
       link: cardLink
     })
+    setCardName(null);
+    setCardLink(null);
   }
 
   return (
@@ -32,10 +34,10 @@ function AddPlacePopup(props) {
       onSubmit={handleSubmit}
     >
       <input className="popup__input" id="placeLabel" type="text" name="placeLabel" autoComplete="off"
-        placeholder="Название" minLength="2" maxLength="30" required onChange={handleChangeCardName} />
+        placeholder="Название" minLength="2" maxLength="30" required onChange={handleChangeCardName} value={cardName || ''}/>
       <span id="placeLabel-error" className="error"></span>
       <input className="popup__input" id="placeImage" type="url" name="placeImage" autoComplete="off"
-        placeholder="Ссылка на картинку" required onChange={handleChangeCardLink} />
+        placeholder="Ссылка на картинку" required onChange={handleChangeCardLink} value={cardLink || ''}/>
       <span className="error" id="placeImage-error"></span>
       <button className="popup__submit-button" type="submit">Создать</button>
     </PopupWithForm>)
