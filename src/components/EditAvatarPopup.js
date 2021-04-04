@@ -1,6 +1,5 @@
 import PopupWithForm from './PopupWithForm.js';
-import { useState, useEffect, useContext, useRef } from 'react';
-import { UserContext } from '../contexts/CurrentUserContext.js'
+import { useRef } from 'react';
 
 function EditAvatarPopup(props) {
 
