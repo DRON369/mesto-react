@@ -1,6 +1,8 @@
 import Header from './Header.js';
 import Main from './Main.js';
 import Footer from './Footer.js';
+import EditProfilePopup from './EditProfilePopup';
+import EditAvatarPopup from './EditAvatarPopup';
 import PopupWithForm from './PopupWithForm.js';
 import ImagePopup from './ImagePopup.js';
 import api from '../utils/api.js';
@@ -47,6 +49,22 @@ function App() {
     setAddPlacePopupOpen(false);
   }
 
+  function handleUpdateUser(user) {
+    api.setUserInfo(user).then(user => {
+      setCurrentUser(user);
+      closeAllPopups();
+    })
+      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+  }
+
+  function handleUpdateAvatar(avatar) {
+    api.setAvatar(avatar).then(user => {
+      setCurrentUser(user);
+      closeAllPopups();
+    })
+      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+  }
+
   return (
     <UserContext.Provider value={currentUser}>
       <div className="App">
@@ -61,32 +79,17 @@ function App() {
             />
             <Footer />
 
-            <PopupWithForm
-              name="edit"
-              title="Редактировать профиль"
+            <EditProfilePopup
               isOpen={isEditProfilePopupOpen}
               onClose={closeAllPopups}
-            >
-              <input className="popup__input" id="profileTitle" type="text" name="profileTitle" placeholder="Ваше имя"
-                autoComplete="off" minLength="2" maxLength="40" required />
-              <span id="profileTitle-error" className="error"></span>
-              <input className="popup__input" id="profileSubtitle" type="text" name="profileSubtitle" placeholder="О себе"
-                autoComplete="off" minLength="2" maxLength="200" required />
-              <span id="profileSubtitle-error" className="error"></span>
-              <button className="popup__submit-button" type="submit">Сохранить</button>
-            </PopupWithForm>
+              onUpdateUser={handleUpdateUser}
+            />
 
-            <PopupWithForm
-              name="avatar"
-              title="Обновить аватар"
+            <EditAvatarPopup
               isOpen={isEditAvatarPopupOpen}
               onClose={closeAllPopups}
-            >
-              <input className="popup__input" id="avatarLink" type="url" name="avatarLink" placeholder="Ссылка на изображение"
-                autoComplete="off" minLength="2" maxLength="120" required />
-              <span id="avatarLink-error" className="error"></span>
-              <button className="popup__submit-button" type="submit">Сохранить</button>
-            </PopupWithForm>
+              onUpdateAvatar={handleUpdateAvatar}
+            />
 
             <PopupWithForm
               name="add-card"
