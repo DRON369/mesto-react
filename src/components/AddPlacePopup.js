@@ -1,10 +1,9 @@
-import PopupWithForm from './PopupWithForm.js';
-import { useState } from 'react';
+import PopupWithForm from "./PopupWithForm.js";
+import { useState, useEffect } from "react";
 
 function AddPlacePopup(props) {
-
-  const [cardName, setCardName] = useState('');
-  const [cardLink, setCardLink] = useState('');
+  const [cardName, setCardName] = useState("");
+  const [cardLink, setCardLink] = useState("");
 
   function handleChangeCardName(event) {
     setCardName(event.target.value);
@@ -19,11 +18,14 @@ function AddPlacePopup(props) {
 
     props.onAddPlace({
       name: cardName,
-      link: cardLink
-    })
-    setCardName(null);
-    setCardLink(null);
+      link: cardLink,
+    });
   }
+
+  useEffect(() => {
+    setCardName("");
+    setCardLink("");
+  }, [props.isOpen]);
 
   return (
     <PopupWithForm
@@ -33,14 +35,37 @@ function AddPlacePopup(props) {
       onClose={props.onClose}
       onSubmit={handleSubmit}
     >
-      <input className="popup__input" id="placeLabel" type="text" name="placeLabel" autoComplete="off"
-        placeholder="Название" minLength="2" maxLength="30" required onChange={handleChangeCardName} value={cardName || ''}/>
+      <input
+        className="popup__input"
+        id="placeLabel"
+        type="text"
+        name="placeLabel"
+        autoComplete="off"
+        placeholder="Название"
+        minLength="2"
+        maxLength="30"
+        required
+        onChange={handleChangeCardName}
+        value={cardName || ""}
+      />
       <span id="placeLabel-error" className="error"></span>
-      <input className="popup__input" id="placeImage" type="url" name="placeImage" autoComplete="off"
-        placeholder="Ссылка на картинку" required onChange={handleChangeCardLink} value={cardLink || ''}/>
+      <input
+        className="popup__input"
+        id="placeImage"
+        type="url"
+        name="placeImage"
+        autoComplete="off"
+        placeholder="Ссылка на картинку"
+        required
+        onChange={handleChangeCardLink}
+        value={cardLink || ""}
+      />
       <span className="error" id="placeImage-error"></span>
-      <button className="popup__submit-button" type="submit">Создать</button>
-    </PopupWithForm>)
+      <button className="popup__submit-button" type="submit">
+        Создать
+      </button>
+    </PopupWithForm>
+  );
 }
 
 export default AddPlacePopup;

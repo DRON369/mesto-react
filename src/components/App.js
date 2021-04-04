@@ -1,25 +1,27 @@
-import Header from './Header.js';
-import Main from './Main.js';
-import Footer from './Footer.js';
-import EditProfilePopup from './EditProfilePopup';
-import EditAvatarPopup from './EditAvatarPopup';
-import AddPlacePopup  from './AddPlacePopup.js';
-import ImagePopup from './ImagePopup.js';
-import api from '../utils/api.js';
-import { useEffect, useState } from 'react';
-import { UserContext } from '../contexts/CurrentUserContext.js'
+import Header from "./Header.js";
+import Main from "./Main.js";
+import Footer from "./Footer.js";
+import EditProfilePopup from "./EditProfilePopup";
+import EditAvatarPopup from "./EditAvatarPopup";
+import AddPlacePopup from "./AddPlacePopup.js";
+import ImagePopup from "./ImagePopup.js";
+import api from "../utils/api.js";
+import { useEffect, useState } from "react";
+import { UserContext } from "../contexts/CurrentUserContext.js";
 
 function App() {
-
-  const [currentUser, setCurrentUser] = useState('');
+  const [currentUser, setCurrentUser] = useState("");
 
   useEffect(() => {
-    api.getUserInfo()
-      .then(user => {
+    api
+      .getUserInfo()
+      .then((user) => {
         setCurrentUser(user);
       })
-      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
-  }, [])
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
+  }, []);
 
   const [isEditProfilePopupOpen, setEditProfilePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setEditAvatarPopupOpen] = useState(false);
@@ -27,11 +29,15 @@ function App() {
   const [selectedCard, setSelectedCard] = useState(null);
 
   function handleAddPlaceSubmit(newCard) {
-    api.createCard(newCard).then(newCard => {
-      setCards([newCard, ...cards]);
-    })
-    .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
-    closeAllPopups();
+    api
+      .createCard(newCard)
+      .then((newCard) => {
+        setCards([newCard, ...cards]);
+        closeAllPopups();
+      })
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
   }
 
   function handleCardClick(card) {
@@ -58,45 +64,75 @@ function App() {
   }
 
   function handleUpdateUser(user) {
-    api.setUserInfo(user).then(user => {
-      setCurrentUser(user);
-      closeAllPopups();
-    })
-      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+    api
+      .setUserInfo(user)
+      .then((user) => {
+        setCurrentUser(user);
+        closeAllPopups();
+      })
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
   }
 
   function handleUpdateAvatar(avatar) {
-    api.setAvatar(avatar).then(user => {
-      setCurrentUser(user);
-      closeAllPopups();
-    })
-      .catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
+    api
+      .setAvatar(avatar)
+      .then((user) => {
+        setCurrentUser(user);
+        closeAllPopups();
+      })
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
   }
 
   const [cards, setCards] = useState([]);
 
   const cardsHandler = () => {
-    api.getCards()
-      .then(data => {
+    api
+      .getCards()
+      .then((data) => {
         setCards(data);
-      }).catch(err => console.log(`При загрузке данных возникла ошибка: ${err.status}`));
-  }
+      })
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
+  };
 
   useEffect(() => {
-    cardsHandler()
-  }, [])
+    cardsHandler();
+  }, []);
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(item => item._id === currentUser._id);
-    api.likeCard(card._id, !isLiked).then((newCard) => {
-      setCards((state) => state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard));
-    });
+    const isLiked = card.likes.some((item) => item._id === currentUser._id);
+    api
+      .likeCard(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) =>
+          state.map((currentCard) =>
+            currentCard._id === card._id ? newCard : currentCard
+          )
+        );
+      })
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
   }
 
   function handleCardDelete(card) {
-    api.deleteCard(card._id).then((delCard) => {
-      setCards((state) => state.filter((currentCard) => currentCard._id === card._id ? delCard._id : currentCard));
-    });
+    api
+      .deleteCard(card._id)
+      .then((delCard) => {
+        setCards((state) =>
+          state.filter((currentCard) =>
+            currentCard._id === card._id ? delCard._id : currentCard
+          )
+        );
+      })
+      .catch((err) =>
+        console.log(`При загрузке данных возникла ошибка: ${err.status}`)
+      );
   }
 
   return (
@@ -132,17 +168,13 @@ function App() {
               isOpen={isAddPlacePopupOpen}
               onClose={closeAllPopups}
               onAddPlace={handleAddPlaceSubmit}
-            >
-            </AddPlacePopup >
+            ></AddPlacePopup>
 
-            {selectedCard
-              ? <ImagePopup
-                card={selectedCard}
-                onClose={closeAllPopups}
-              />
-              : ('')
-            }
-
+            {selectedCard ? (
+              <ImagePopup card={selectedCard} onClose={closeAllPopups} />
+            ) : (
+              ""
+            )}
           </div>
         </div>
       </div>
